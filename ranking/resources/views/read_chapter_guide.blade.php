@@ -11,6 +11,7 @@
     <script src="{{ asset('static/mammicms/') }}/js/jquery.min.js"></script>
     <script src="{{ asset('static/mammicms/') }}/js/mescroll.min.js"></script>
     <script src="{{ asset('static/mammicms/') }}/js/base.js"></script>
+    <link href="{{ asset('static/mammicms/') }}/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('static/mammicms/') }}/css/style.css">
     <link rel="stylesheet" href="{{ asset('static/mammicms/') }}/css/read.css" >
 </head>
@@ -188,24 +189,16 @@
     </div>
 <script src="{{ asset('static/mammicms/') }}/layer/layer.js"></script>
 <script src="{{ asset('static/mammicms/') }}/js/epview.js"></script>
-<script src="{{ asset('static/mammicms/') }}/js/digg.js"></script>
-<script src="{{ asset('static/mammicms/') }}/js/read.js"></script>
-<script src="{{ asset('static/mammicms/') }}/js/history.js"></script>
 
-<script src="{{ asset('static/tongji.js') }}"></script>
-<script>
-    let id="{{ $comic->id }}";
-    let tc="11"; // 这里的 11 是示例 HTML 中的，可能需要根据您的业务逻辑确定其含义
-    ispay(0,0,1);
-    set_history(
-        '{{ $comic->title }}',
-        '{{ $chapter->title }}',
-        '{{ $comic_url }}',
-        '{{ request()->url() }}',
-        '{{ $comic_cover_url }}',
-        '{{ $comic->author }}',
-        '{{ Str::limit(str_replace(["\r", "\n", "'", "\""], "", $comic->summary), 120) }}' // 清理换行符和引号，防止 JS 错误
-    );
-</script>
+	<div id="promotion-banner">
+		<div class="promo-logo">
+			<img src="https://js.kegalu.com/vip/css/logo.png" alt="Logo" data-clarity-loaded="o900yz">
+		</div>
+		<div class="promo-text">
+			欢迎下载本站APP  <br>免费看全集无栅碱漫画！
+		</div>
+		<a href="https://down.njshx.com/xxsman.apk" class="promo-button">下载APP</a>
+		<div id="close-promotion-btn" class="promo-close">×</div>
+	</div>
 </body>
 </html>

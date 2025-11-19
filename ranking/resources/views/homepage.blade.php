@@ -10,6 +10,7 @@
 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 <link href="{{ asset('static/mammicms/') }}/css/b.min.css" rel="stylesheet">
 <link href="{{ asset('static/mammicms/') }}/css/my.css" rel="stylesheet">
+<link href="{{ asset('static/mammicms/') }}/css/app.css" rel="stylesheet">
 <script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/jquery.min.js"></script> 
 <script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/b.min.js"></script>	
 </head>
@@ -17,10 +18,10 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">ZZ漫画网</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-			<a class="navbar-brand" href="/">ZZ漫画网</a> 
+			<!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">YY漫画网</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> -->
+			<a class="navbar-brand" href="/">YY漫画网</a> 
 		</div>
-		<div id="navbar" class="navbar-collapse collapse">
+		<!-- <div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class="navitem"><a href="/">首页</a></li>
 				<li class="navitem"><a href="#">近期更新</a></li>
@@ -32,7 +33,7 @@
 					<li><button type="button" class="btn btn-sm btop11a">漫画搜索</button></li>
 				</ol>
 			</div>
-		</div>		
+		</div>		 -->
 	</div>
 </nav>
 <div class="container">
@@ -150,6 +151,18 @@
 		<p> &copy;YY漫画网 <a href="#">网站地图</a><br/>
 			本站所有的漫画、图片、评论等，均由网友发表或上传并维护或收集自网络，属个人行为，与YY漫画网立场无关。 </p>
 	</footer>
+
+
+	<div id="promotion-banner">
+		<div class="promo-logo">
+			<img src="https://js.kegalu.com/vip/css/logo.png" alt="Logo" data-clarity-loaded="o900yz">
+		</div>
+		<div class="promo-text">
+			欢迎下载本站APP  <br>免费看全集无栅碱漫画！
+		</div>
+		<a href="https://down.njshx.com/xxsman.apk" class="promo-button">下载APP</a>
+		<div id="close-promotion-btn" class="promo-close">×</div>
+	</div>
 </div>
 </body>
 </html>

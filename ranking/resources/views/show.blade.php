@@ -22,21 +22,22 @@
 <link href="{{ asset('static/mammicms/') }}/css/b.min.css" rel="stylesheet">
 <script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/jquery.min.js"></script> 
 <script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/b.min.js"></script>	
+<link href="{{ asset('static/mammicms/') }}/css/app.css" rel="stylesheet">
 <link href="{{ asset('static/mammicms/') }}/css/my.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+			<!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> -->
 			<a class="navbar-brand" href="/">YY漫画网</a> 
 		</div>
-		<div id="navbar" class="navbar-collapse collapse">
+		<!-- <div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class="navitem"><a href="/">首页</a></li>
                 <li class="navitem"><a href="#">漫画大全</a></li>
 			</ul>
-		</div>		
+		</div>		 -->
 	</div>
 </nav>
 
@@ -176,6 +177,16 @@
 	</footer>
 </div>
 
+	<div id="promotion-banner">
+		<div class="promo-logo">
+			<img src="https://js.kegalu.com/vip/css/logo.png" alt="Logo" data-clarity-loaded="o900yz">
+		</div>
+		<div class="promo-text">
+			欢迎下载本站APP  <br>免费看全集无栅碱漫画！
+		</div>
+		<a href="https://down.njshx.com/xxsman.apk" class="promo-button">下载APP</a>
+		<div id="close-promotion-btn" class="promo-close">×</div>
+	</div>
 <div style="display:none"></div>
 </body>
 </html>
