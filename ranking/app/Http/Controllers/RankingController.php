@@ -77,7 +77,7 @@ class RankingController extends Controller
     }
 
     /**
-     * 章节阅读引导页展示 (复刻源站引导页)
+     * 章节阅读引导页展示
      * URL: /chapter/{comic_id}/{chapter_id}.html
      */
     public function readChapter($comic_id, $chapter_id)
