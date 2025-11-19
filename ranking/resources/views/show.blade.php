@@ -11,7 +11,7 @@
 <meta property="og:type" content="novel"/>
 <meta property="og:title" content="{{ $comic->title }}"/>
 <meta property="og:description" content="{{ Str::limit($comic->summary, 100) }}"/>
-<meta property="og:image" content="{{ $comic->cover_url }}"/>
+<meta property="og:image" content="{{ asset($comic->cover_url) }}"/>
 <meta property="og:novel:category" content="{{ $comic->category->name ?? '韩漫' }}"/>
 <meta property="og:novel:author" content="{{ $comic->author }}"/>
 <meta property="og:novel:status" content="{{ $comic->status }}"/>
@@ -19,10 +19,10 @@
 <meta property="og:novel:latest_chapter_name" content="{{ $comic->latest_chapter_title }}"/>
 
 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-<link href="https://js.xueao.cn/mammicms/very/css/b.min.css" rel="stylesheet">
-<script type="text/javascript" src="https://js.xueao.cn/mammicms/very/js/jquery.min.js"></script> 
-<script type="text/javascript" src="https://js.xueao.cn/mammicms/very/js/b.min.js"></script>	
-<link href="https://js.xueao.cn/mammicms/very/css/my.css" rel="stylesheet">
+<link href="{{ asset('static/mammicms/') }}/css/b.min.css" rel="stylesheet">
+<script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/jquery.min.js"></script> 
+<script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/b.min.js"></script>	
+<link href="{{ asset('static/mammicms/') }}/css/my.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -53,7 +53,7 @@
                 <div class="panel-heading">漫画简介</div>
                 <div class="pannel-body info">
                     <div class="info1">
-                        <img src="{{ $comic->cover_url }}" height="130" width="100" alt="{{ $comic->title}}"/>
+                        <img src="{{ asset($comic->cover_url) }}" height="130" width="100" alt="{{ $comic->title}}"/>
                     </div>
                     <div class="info2">
                         <h1 class="text-left">{{ $comic->title }}</h1>
@@ -150,7 +150,7 @@
                         <div class="media" style="border:none;margin-bottom: 0;padding-bottom: 0">
                             <div class="media-left media-heading">
                                 <a href="{{ route('comic.show', $comic->id) }}" title='{{ $comic->title }}'>
-                                    <img src="{{ $comic->cover_url }}" alt='{{ $comic->title }}' class="img" width="90" height="120" />
+                                    <img src="{{ asset($comic->cover_url) }}" alt='{{ $comic->title }}' class="img" width="90" height="120" />
                                 </a>
                             </div>
                             <div class="media-body">

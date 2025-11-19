@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Manhua;
 use App\Models\Category; 
+use App\Models\Chapter;
 use Illuminate\Support\Str; 
 
 class RankingController extends Controller
@@ -73,5 +74,66 @@ class RankingController extends Controller
         $seo_description = "YY漫画网出品的漫画{$comic->title}是由{$comic->author}漫画作家创作,{$comic->title}漫画讲述了:".Str::limit($comic->summary, 120);
 
         return view('show', compact('comic', 'sidebarComics', 'youMayLikeComics', 'seo_title', 'seo_keywords', 'seo_description'));
+    }
+
+    /**
+     * 章节阅读引导页展示 (复刻源站引导页)
+     * URL: /chapter/{comic_id}/{chapter_id}.html
+     */
+    public function readChapter($comic_id, $chapter_id)
+    {
+        // 查找漫画和章节，如果找不到会抛出 404
+        $comic = Manhua::findOrFail($comic_id);
+        $chapter = Chapter::findOrFail($chapter_id);
+
+        // 【新增】获取当前漫画的所有章节列表，按 sort_order 升序排列
+        $all_chapters = Chapter::where('comic_id', $comic_id)
+                               ->orderBy('sort_order', 'asc')
+                               ->get();
+
+        // 侧边栏和底部的精彩推荐：按点击量排行，限制取前 6 个
+        $youMayLikeComics = Manhua::where('id', '!=', $comic->id) 
+                                  ->orderBy('views', 'desc')
+                                  ->take(6)->get(); 
+
+        // SEO设置
+        $seo_title = "{$comic->title}漫画({$comic->author})_第{$chapter->title}在线免费阅读-YY漫画网";
+        $seo_keywords = "{$comic->title},{$chapter->title},{$comic->title}漫画最新章节,{$comic->title}漫画,{$comic->title}漫画免费观看";
+        $seo_description = "您当前阅读的漫画《{$comic->title}》是由{$comic->author}创作的免费漫画,最新章节{$chapter->title}免费在线阅读。";
+
+        $chapter_title = $chapter->title;
+        $comic_url = route('comic.show', ['id' => $comic->id]);
+
+        // 获取下一话和上一话的链接 (使用 sort_order 字段来查找)
+        $next_chapter = Chapter::where('comic_id', $comic_id)
+                                ->where('sort_order', '>', $chapter->sort_order)
+                                ->orderBy('sort_order', 'asc')
+                                ->first();
+
+        $prev_chapter = Chapter::where('comic_id', $comic_id)
+                                ->where('sort_order', '<', $chapter->sort_order)
+                                ->orderBy('sort_order', 'desc')
+                                ->first();
+
+        $next_url = $next_chapter ? route('chapter.read', ['comic_id' => $comic->id, 'chapter_id' => $next_chapter->id]) : 'javascript:void(0)';
+        $prev_url = $prev_chapter ? route('chapter.read', ['comic_id' => $comic->id, 'chapter_id' => $prev_chapter->id]) : 'javascript:void(0)';
+        
+        // 漫画封面图
+        $comic_cover_url = $comic->cover_url; 
+
+        return view('read_chapter_guide', compact(
+            'comic', 
+            'chapter', 
+            'chapter_title',
+            'comic_url', 
+            'next_url',
+            'prev_url',
+            'youMayLikeComics',
+            'comic_cover_url',
+            'seo_title', 
+            'seo_keywords', 
+            'seo_description',
+            'all_chapters' // <-- 【新增】将所有章节传递给视图
+        ));
     }
 }

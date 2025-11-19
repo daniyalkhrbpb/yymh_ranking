@@ -8,17 +8,17 @@
 <meta name="keywords" content="YY漫画网,YY漫画网在线,YY漫画网免费漫画,韩漫,韩漫在线" />
 <meta name="description" content="YY漫画网是免费的漫画在线分享网站。漫画爱好者可以在这里收集,分享自己喜爱和原创漫画作品。" />
 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-<link href="https://js.xueao.cn/mammicms/very/css/b.min.css" rel="stylesheet">
-<link href="https://js.xueao.cn/mammicms/very/css/my.css" rel="stylesheet">
-<script type="text/javascript" src="https://js.xueao.cn/mammicms/very/js/jquery.min.js"></script> 
-<script type="text/javascript" src="https://js.xueao.cn/mammicms/very/js/b.min.js"></script>	
+<link href="{{ asset('static/mammicms/') }}/css/b.min.css" rel="stylesheet">
+<link href="{{ asset('static/mammicms/') }}/css/my.css" rel="stylesheet">
+<script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/jquery.min.js"></script> 
+<script type="text/javascript" src="{{ asset('static/mammicms/') }}/js/b.min.js"></script>	
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">YY漫画网</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-			<a class="navbar-brand" href="/">YY漫画网</a> 
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">ZZ漫画网</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+			<a class="navbar-brand" href="/">ZZ漫画网</a> 
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
@@ -66,7 +66,8 @@
                         <div class="media" style="border:none;margin-bottom: 0;padding-bottom: 0">
                             <div class="media-left media-heading">
                                 <a href="{{ route('comic.show', $comic->id) }}" title='{{ $comic->title }}'>
-                                    <img src="{{ $comic->cover_url }}" alt='{{ $comic->title }}' class="img" width="100" height="130" />
+									<img src="{{ asset($comic->cover_url) }}" alt="{{ $comic->title }}"  class="img" width="100" height="130">
+                                    <!-- <img src="{{ $comic->cover_url }}" alt='{{ $comic->title }}' class="img" width="100" height="130" /> -->
                                 </a>
                             </div>
                             <div class="media-body">

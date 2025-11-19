@@ -4,6 +4,8 @@ import pymysql
 import time
 import random
 import re
+import os  # 新增: 用于文件路径操作
+import hashlib  # 新增: 用于生成唯一文件名
 from urllib.parse import urljoin
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -25,6 +27,18 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
     'Referer': BASE_URL
 }
+
+# 新增: 图片本地化配置
+# 注意: 这个路径应该是Laravel项目 public 目录下的一个绝对路径
+# 例如：'/var/www/yymh_ranking/ranking/public/covers/' 或 'C:/path/to/ranking/public/covers/'
+# 请根据您的实际部署环境修改此绝对路径，并确保目录存在且爬虫有写入权限。
+#linux路径
+#LOCAL_IMAGE_BASE_DIR = '/path/to/your/laravel/public/covers/'
+#windows路径
+LOCAL_IMAGE_BASE_DIR = 'C:\\laragon\\www\\ranking\\public\\covers'
+
+# 数据库中存储的相对路径前缀 (假设在public目录下)
+DB_PATH_PREFIX = 'covers/'
 
 
 # ==========================================
@@ -62,6 +76,55 @@ def clean_summary(text):
     for kw in keywords:
         if kw in text: return text.split(kw)[-1].strip()
     return text
+
+
+def download_cover_image(image_url, title, session):
+    """下载封面图片到本地, 并返回相对路径"""
+    if not image_url:
+        return ""
+
+    full_image_url = urljoin(BASE_URL, image_url)
+    if not full_image_url.startswith('http'):
+        # 如果不是完整的URL，可能本身就是相对路径，直接返回原值（不推荐，但作为极端情况处理）
+        return image_url
+
+    try:
+        # 1. 确保本地存储目录存在
+        os.makedirs(LOCAL_IMAGE_BASE_DIR, exist_ok=True)
+
+        # 2. 生成唯一文件名 (使用URL的哈希值和原始文件名后缀)
+        # 移除URL中的查询参数，获取文件后缀名
+        url_without_params = full_image_url.split('?')[0]
+        ext = os.path.splitext(url_without_params)[-1].lower()
+        if not ext or ext not in ['.jpg', '.jpeg', '.png', '.gif']:
+            ext = '.jpg'  # 默认后缀
+
+        # 使用完整URL的MD5哈希值作为文件名，确保唯一性并避免过长文件名
+        filename_base = hashlib.md5(full_image_url.encode('utf-8')).hexdigest()
+        local_filename = filename_base + ext
+        local_filepath_abs = os.path.join(LOCAL_IMAGE_BASE_DIR, local_filename)
+
+        # 3. 检查文件是否已存在 (避免重复下载)
+        local_path_db = DB_PATH_PREFIX + local_filename
+        if os.path.exists(local_filepath_abs):
+            # print(f"  [i] 封面已存在: {local_path_db}")
+            return local_path_db
+
+        # 4. 下载图片
+        print(f"  [+] 正在下载封面: {full_image_url}")
+        response = session.get(full_image_url, timeout=10)
+        if response.status_code == 200:
+            with open(local_filepath_abs, 'wb') as f:
+                f.write(response.content)
+
+            return local_path_db
+        else:
+            print(f"  [X] 下载图片失败: {full_image_url}, 状态码: {response.status_code}")
+            return ""
+
+    except Exception as e:
+        print(f"  [!] 下载图片时发生错误: {e}")
+        return ""
 
 
 # ==========================================
@@ -121,7 +184,7 @@ def parse_detail_and_save(task_data):
         with conn.cursor() as cursor:
             cat_id = get_or_create_category_id(cursor, category_name)
 
-            # 存入漫画表
+            # 存入漫画表 (此处不变)
             sql = """
                 INSERT INTO comics 
                 (category_id, title, origin_url, cover_url, author, status, summary, last_updated_time, latest_chapter_title, 
@@ -145,26 +208,57 @@ def parse_detail_and_save(task_data):
             cursor.execute("SELECT id FROM comics WHERE origin_url = %s", (url,))
             comic_id = cursor.fetchone()['id']
 
-            # 存章节
+            # ==============================================================
+            # 【修改】存章节：基于章节标题去重
+            # ==============================================================
+
+            # 1. 查询该漫画已有的章节标题集合
+            # 注意：这里我们使用 title 作为唯一标识
+            cursor.execute("SELECT title FROM chapters WHERE comic_id = %s", (comic_id,))
+            existing_titles = {row['title'].strip() for row in cursor.fetchall()}
+
+            # 2. 采集新的章节列表
             chapter_list = soup.select('ul.list-charts li a, #chapter-list li a')
+
             if chapter_list:
-                chapter_data = []
+                chapter_data_to_insert = []
+
                 for i, link in enumerate(chapter_list):
                     c_title = link.text.strip()
                     c_href = link.get('href')
                     if not c_href: continue
                     c_url = urljoin(BASE_URL, c_href)
-                    chapter_data.append((comic_id, c_title, c_url, i))
 
-                cursor.executemany(
-                    "INSERT IGNORE INTO chapters (comic_id, title, url, sort_order) VALUES (%s, %s, %s, %s)",
-                    chapter_data
-                )
+                    # 3. 检查章节标题是否已存在，如果不存在则添加到待插入列表
+                    if c_title not in existing_titles:
+                        chapter_data_to_insert.append((comic_id, c_title, c_url, i))
+
+                        # 立即添加到集合，防止同一批次中有重复标题被插入
+                        existing_titles.add(c_title)
+
+                        # 4. 只插入新的章节
+                if chapter_data_to_insert:
+                    print(f"  [+] 发现 {len(chapter_data_to_insert)} 个新章节并准备插入 (基于标题去重)。")
+
+                    # 使用普通的 INSERT 即可
+                    cursor.executemany(
+                        "INSERT INTO chapters (comic_id, title, url, sort_order) VALUES (%s, %s, %s, %s)",
+                        chapter_data_to_insert
+                    )
+                else:
+                    print("  [i] 未发现新章节。")
+
+            # ==============================================================
+            # 【修改结束】
+            # ==============================================================
 
             conn.commit()
 
     except Exception as e:
-        print(f"  [!] {url} 错误: {e}")
+        # print(f"  [!] {url} 错误: {e}")
+        # 为了调试方便，打印完整的错误堆栈
+        import traceback
+        traceback.print_exc()
     finally:
         if 'conn' in locals() and conn.open:
             conn.close()

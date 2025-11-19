@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg 
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ width="47px" height="47px">
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
+ d="M23.000,1.000 C35.150,1.000 45.000,10.850 45.000,23.000 C45.000,35.150 35.150,45.000 23.000,45.000 C10.850,45.000 1.000,35.150 1.000,23.000 C1.000,10.850 10.850,1.000 23.000,1.000 Z"/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M13.679,16.333 L15.714,16.333 "/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M19.786,16.333 L31.321,16.333 "/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M13.679,23.667 L15.714,23.667 "/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M19.786,23.667 L31.321,23.667 "/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M13.679,31.000 L15.714,31.000 "/>
+<path fill-rule="evenodd"  stroke="rgb(102, 102, 102)" stroke-width="2px" stroke-linecap="round" stroke-linejoin="round" fill="none"
+ d="M19.786,31.000 L31.321,31.000 "/>
+</svg>
